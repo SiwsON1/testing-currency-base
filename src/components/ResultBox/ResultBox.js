@@ -7,8 +7,6 @@ import styles from './ResultBox.module.scss';
 
 const ResultBox = ({ from, to, amount }) => {
 
-  console.log('tak to wygląda', convertPLNToUSD());
-
   const convertedAmount = useMemo(() => {
     if(from === 'USD' && to === 'PLN') return convertUSDToPLN(amount);
     if(from === 'PLN' && to === 'USD') return convertPLNToUSD(amount);
@@ -17,9 +15,18 @@ const ResultBox = ({ from, to, amount }) => {
 
   const formattedAmount = useMemo(() => formatAmountInCurrency(amount, from), [amount, from]);
 
+  let resultText;
+  if (amount < 0) {
+    resultText = 'Wrong value...';
+  } else {
+    resultText = `${formattedAmount} = ${convertedAmount}`;
+  }
+  
+  
+
   return (
-    <div className={styles.result}>
-      {formattedAmount} = {convertedAmount}
+    <div data-testid="resultDiv" className={styles.result}>
+      {resultText}
     </div>
   );
 };
